@@ -16,20 +16,20 @@ def load_model():
 model, scaler = load_model()
 
 st.title("🔢 Handwritten Digit Recognizer")
-st.markdown("64 pixel values enter karo — model predict karega ke ye digit kaunsa number hai (0-9).")
+st.markdown("Enter 64 pixel values — the model will predict which digit (0-9) it represents.")
 st.divider()
 
-option = st.radio("Input method chunno:", ["📋 Sample data se test karo", "✏️ Khud pixel values likho"])
+option = st.radio("Choose input method:", ["📋 Test with sample data", "✏️ Enter pixel values manually"])
 
-if option == "📋 Sample data se test karo":
+if option == "📋 Test with sample data":
     df = pd.read_csv('digits_dataset.csv')
-    sample_idx = st.slider("Sample row select karo", 0, len(df)-1, 0)
+    sample_idx = st.slider("Select sample row", 0, len(df)-1, 0)
     sample_row = df.iloc[sample_idx]
     actual_label = int(sample_row['label'])
     pixel_values = sample_row.drop('label').values
-    st.info(f"✅ Actual Label (sahi jawab): **{actual_label}**")
+    st.info(f"✅ Actual Label (correct answer): **{actual_label}**")
 else:
-    st.markdown("**64 pixel values enter karo (0-16 ke beech):**")
+    st.markdown("**Enter 64 pixel values (between 0-16):**")
     cols = st.columns(8)
     pixel_values = []
     for i in range(64):
@@ -40,7 +40,7 @@ else:
 
 st.divider()
 
-if st.button("🔍 Predict karo", use_container_width=True, type="primary"):
+if st.button("🔍 Predict", use_container_width=True, type="primary"):
     input_array = np.array(pixel_values).reshape(1, -1)
     input_scaled = scaler.transform(input_array)
     prediction = model.predict(input_scaled)[0]
